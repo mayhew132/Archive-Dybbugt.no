@@ -13,15 +13,18 @@
 
 # Detect if FastStartup is enabled
     $SearchPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power"
-    $TestForFastStartup = Get-ItemPropertyValue $searchpath -Name "HiberBootEnabled"
+    $TestForFastStartup = Get-ItemPropertyValue $searchpath -Name "HiberBootEnabled" -ErrorAction SilentlyContinue
+    
         
     if (($TestForFastStartup -eq "1") -or $TestForFastStartup -eq $null )
      {
         Write-EventLog -LogName $logName -Source $sourceName -EventID 200 -EntryType Warning -Message "Intune Remediation detected a change as needed for FastStartup Configuration on the device, remediation script will be run."
+        Write-Host "Intune Remediation detected a change as needed for FastStartup Configuration on the device, remediation script will be run."
         exit 1
      }
      else
      {        
         Write-EventLog -LogName $logName -Source $sourceName -EventID 100 -EntryType Information -Message "Intune Remediation checked config for FastStartup, no change was needed."     
+        Write-Host "Intune Remediation checked config for FastStartup, no change was needed."     
         exit 0
      }
